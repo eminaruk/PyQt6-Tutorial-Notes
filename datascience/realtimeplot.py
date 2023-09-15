@@ -6,6 +6,7 @@ from PyQt6.QtWidgets import QWidget
 from pyqtgraph import plot, PlotWidget
 import pyqtgraph as pg
 from random import randint
+import numpy as np
 
 
 
@@ -23,8 +24,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.graphWidget.showGrid(x = True, y = True)
         # self.graphWidget.setXRange(5, 20, padding=0)
         # self.graphWidget.setYRange(30, 40, padding=0)
-        self.x =[range(0,100)]
-        self.y = [randint(0,100) for _ in range(0,100)]
+        self.x =np.array(list(range(100)))
+        self.y = np.array([randint(0,100) for _ in range(100)])
 
 
         ### writing the data
@@ -54,7 +55,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def plot(self, x,y, plot_name, color, pen_style = QtCore.Qt.PenStyle):
 
         pen = pg.mkPen(color = color, width = 7, style = pen_style)
-        self.graphWidget.plot(x, y, name= plot_name, pen= pen, symbol= "o", symbolSize = 11, symbolBrush = "#1F6E8C" )
+        return self.graphWidget.plot(x, y, name= plot_name, pen= pen, symbol= "o", symbolSize = 11, symbolBrush = "#1F6E8C" )
 
 
     def clearplot(self):
@@ -63,16 +64,16 @@ class MainWindow(QtWidgets.QMainWindow):
     
     def updatePlotData(self):
 
-        self.x = self.x[1:]
-        self.x.append(self.x[-1] + 1)
+        self.x = self.x[1:] + [self.x[-1] + randint(1,5)]
+        self.y = self.y[1:] + [randint(0, 100)]
 
-        self.y = self.y[1:]
-        self.y.append(randint(0, 100))
-        self.data_line.setData(self.x, self.y)
+        # Create NumPy arrays from updated data
+        x_np = np.array(self.x)
+        y_np = np.array(self.y)
 
-        
+        # Update the data_line with the new data
+        self.data_line.setData(x=x_np, y=y_np)
 
-        
 
 
 def main():
