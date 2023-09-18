@@ -22,9 +22,10 @@ class MainWindow(QtWidgets.QMainWindow):
         # self.draw_object(object_type = "line", pen_color="red", limit = 13000, width= 13, point1 = (70,70), point2=(300, 300))
         # self.draw_object(object_type = "multiple_rect", pen_color="red", limit = 13000, width= 3, n_rect = 7, round_size = 7)
         # self.draw_object(object_type = "ellipse", pen_color="#376F9F", limit = 13000, width= 3, n_shape = 7, round_size = 7)
-        self.draw_object(object_type = "ellipse", centered_ellipse = True, center_point = (270, 270), radius = (50,50), radius_size = (13, 17),pen_color="#376F9F", limit = 13000, width= 3, n_shape = 7, round_size = 7)
+        # self.draw_object(object_type = "ellipse", centered_ellipse = True, center_point = (270, 270), radius = (50,50), radius_size = (13, 17),pen_color="#376F9F", limit = 13000, width= 3, n_shape = 7, round_size = 7)
+        self.draw_object(object_type = "text", text_position = (70, 210), text = "Hello guys. I am Mehmet Emin :)", font_name= "Times", centered_ellipse = True, center_point = (270, 270), radius = (50,50), radius_size = (13, 17),pen_color="#376F9F", limit = 13000, width= 3, n_shape = 7, round_size = 7)
 
-    def draw_object(self, width = 17, pen_color = "black",colorful=False, brush_color= "white"  ,brush = False, *args, **kwargs):
+    def draw_object(self, width = 17, pen_color = "black",colorful=False, brush_color= "white"  ,brush = False, font_name = str , *args, **kwargs):
         n_shape = 0
         colors = ['#FFD141', '#376F9F', '#0D1F2D', '#E9EBEF', '#EB5160']
         canvas = self.label.pixmap()
@@ -35,6 +36,12 @@ class MainWindow(QtWidgets.QMainWindow):
             pen.setWidth(width)
             pen.setColor(QtGui.QColor(pen_color))
 
+            font = QtGui.QFont()
+            font.setBold(True)
+            font.setFamily(font_name)
+            font.setPointSize(30)
+
+
             if brush:
                 brush = QtGui.QBrush()
                 brush.setColor(QtGui.QColor(brush_color))
@@ -43,6 +50,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
             my_painter.setPen(pen)
+            my_painter.setFont(font)
         
         except:
             print("Error: Function arguments are not true!")
@@ -135,6 +143,20 @@ class MainWindow(QtWidgets.QMainWindow):
             
             except:
                 print("Error: Ellipse drawing error!")
+        
+        if kwargs["object_type"] == "text":
+
+            try: 
+
+                text_content = kwargs["text"]
+                p1, p2 = kwargs["text_position"]
+                # print(p1, p2)
+                # my_painter.drawText(p1, p2 , 700, 700, Qt.AlignmentFlag.AlignHCenter,  text_content)
+                my_painter.drawText(p1, p2, text_content)
+
+
+            except:
+                print("Error: Text drawing error!")
         my_painter.end()
         self.label.setPixmap(canvas)
 
