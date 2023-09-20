@@ -38,11 +38,10 @@ class _Bar(QtWidgets.QWidget):
         d_height = self.size().height() + (self._padding * 2)
         step_size = d_height / self.n_steps
         click_y = e.pos().y() - self._padding - step_size / 2
-
-        
-
         pc = (d_height - click_y) / d_height
         self.value = vmin + pc * (vmax - vmin)
+
+        self.clickedValue.emit(self.value)
 
     def paintEvent(self, e):
         painter = QtGui.QPainter(self)
