@@ -58,8 +58,8 @@
 # obj.value = 7
 # print(obj.value)
 
-from PyQt6.QtWidgets import QWidget, QApplication
-from PyQt6.QtCore import QPropertyAnimation, QPoint, QEasingCurve
+from PyQt6.QtWidgets import QWidget, QApplication, QGraphicsOpacityEffect
+from PyQt6.QtCore import QPropertyAnimation, QPoint, QEasingCurve, QSequentialAnimationGroup, QSize, QParallelAnimationGroup
 import sys
 
 
@@ -72,13 +72,30 @@ class MyAnimation(QWidget):
         self.resize(700, 700)
         self.child = QWidget(self)
         self.child.resize(70,70)
+
+        effect = QGraphicsOpacityEffect(self.child)
+        self.child.setGraphicsEffect(effect)
+
         self.child.setStyleSheet("background-color:red;border-radius:13px;")
         self.animation = QPropertyAnimation(self.child, b"pos")  ### pos is not just a single value, it is also a function
         self.animation.setEasingCurve(QEasingCurve.Type.InOutCubic)
         self.animation.setStartValue(QPoint(0,0))
         self.animation.setEndValue(QPoint(470, 470))
-        self.animation.setDuration(1700)
-        self.animation.start()
+        self.animation.setDuration(2100)
+
+        # self.animation_2 = QPropertyAnimation(self.child, b"size")
+        # self.animation_2.setEndValue(QSize(70, 150))
+        # self.animation_2.setDuration(1700)
+
+        self.animation_2 = QPropertyAnimation(effect, b"opacity")
+        self.animation_2.setStartValue(0)
+        self.animation_2.setEndValue(1)
+        self.animation_2.setDuration(2100)
+
+        self.animation_grup = QParallelAnimationGroup()
+        self.animation_grup.addAnimation(self.animation)
+        self.animation_grup.addAnimation(self.animation_2)
+        self.animation_grup.start()
 
 
 def main():
