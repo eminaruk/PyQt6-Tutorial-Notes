@@ -15,6 +15,7 @@ engine.load("main.qml")
 class BackEnd(QObject):
 
     updated = pyqtSignal(str, arguments=['time'])
+    hms = pyqtSignal(int, int, int, arguments = ["hours", "minutes", "seconds"])
 
     def __init__(self):
 
@@ -28,6 +29,7 @@ class BackEnd(QObject):
         currtime = strftime("%H:%M:%S", localtime())
         # engine.rootObjects()[0].setProperty("currTime", currtime)
         self.updated.emit(currtime)
+        self.hms.emit(localtime().tm_hour, localtime().tm_min, localtime().tm_sec)
 
 
 backend = BackEnd()
